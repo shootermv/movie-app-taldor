@@ -1,0 +1,105 @@
+﻿
+<div class="container-fluid">
+
+    <ng-template #content let-modal>
+        <div class="modal-header">
+          <h4 class="modal-title" id="modal-basic-title">Add New Movie</h4>
+          <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+         
+          <form [formGroup]="newMovie" (ngSubmit)="onSubmit(checkoutForm.value)">
+
+            <div class="form-group">
+              <label for="title">
+                Movie Title
+              </label>
+              <input id="text" type="text" class="form-control"  formControlName="title" [ngClass]="{ 'is-invalid': submitted && f.title.errors }">          
+              <div *ngIf="submitted && f.title.errors"  class="invalid-feedback">
+                <div *ngIf="f.title.errors.required">Title is required</div>
+                <div *ngIf="f.title.errors.isExist">Movie With This Title Already Exists</div>
+              </div>
+            </div>
+          
+            <div class="form-group">
+              <label for="category">
+                Category
+              </label>
+              <select id="category" class="form-control"  formControlName="category" [ngClass]="{ 'is-invalid': submitted && f.category.errors }">
+                <option [ngValue]="null" disabled>Choose category</option>
+                <option *ngFor="let cat of availableCategories" [ngValue]="cat">
+                 {{ cat }}
+                </option>
+              </select>
+              <div *ngIf="submitted && f.category.errors"  class="invalid-feedback">
+                <div *ngIf="f.category.errors.required">Category is required</div>
+              </div>              
+            </div>
+
+            <div class="form-group">
+              <label for="link">
+                Link To IMDB
+              </label>
+              <input id="link" type="text" class="form-control"  formControlName="link" [ngClass]="{ 'is-invalid': submitted && f.link.errors }">
+              <div *ngIf="submitted && f.link.errors"  class="invalid-feedback">
+                <div *ngIf="f.link.errors.required">Link is required</div>
+                <div *ngIf="f.link.errors.isBroken">This link is not to IMBD</div>
+              </div>              
+            </div>            
+
+            <div class="form-group">
+              <label for="posterUrl">
+                Link To Poster Image
+              </label>
+              <input id="posterUrl" type="text" class="form-control"  formControlName="posterUrl" [ngClass]="{ 'is-invalid': submitted && f.posterUrl.errors }">
+              <div *ngIf="submitted && f.posterUrl.errors"  class="invalid-feedback">
+                <div *ngIf="f.posterUrl.errors.required">poster Url is required</div>
+                <div *ngIf="f.posterUrl.errors.isBroken">poster Url is broken</div>
+              </div>            
+            </div> 
+
+
+          </form>
+        
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-dark" (click)="checkForm() && modal.close('Save click')">Save</button>
+        </div>
+    </ng-template>
+      
+    
+    <!--  Movies List  -->
+    <div class="row flex-xl-nowrap">
+      <main  class="col-md-9 col-xl-8 py-md-3 pl-md-5 bd-content">
+          <div class="container-fluid">
+              <div class="row">
+                  <div class="col-sm-4" *ngFor="let movie of movies">
+                      <div class="card">
+                          <div class="card-body">
+                              <div><a href="{{movie.link}}">{{movie.title}}</a> </div>
+                              <div>({{movie.category}})</div>
+                              <a href="{{movie.link}}"><img src="{{movie.posterUrl}}"/></a> 
+                              <a (click)="deleteMovie(movie.id)" class="text-danger">x</a>
+                          </div>
+                      </div>
+                  </div>
+              </div> 
+          </div>
+      </main>
+
+
+      <!--  Sidebar -->
+      <div class="col-md-3 col-xl-4 bd-sidebar">
+        <nav>
+            <ul class="navbar-nav list-group">
+                <li class="nav-item list-group-item">Hi {{currentUser.name}}!</li>
+                <li class="nav-item list-group-item clickable" (click)="open(content)">Add New Movie</li>
+                <li class="nav-item list-group-item" *ngFor="let cat of foundInMovies(availableCategories)">{{cat}}</li>
+                <li class="nav-item list-group-item"><a (click)="logout()">Logout</a></li>
+            </ul>
+        </nav>
+      </div>  
+    </div>
+</div>

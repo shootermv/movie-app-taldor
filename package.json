@@ -1,0 +1,10 @@
+{
+    "name": "movies_assignment",
+    "version": "1.0.0",
+    "author": "Moshe Vilner",
+    "license": "MIT",
+    "scripts": {
+      "install-dependencies": "npm install && cd server && npm install && cd ../client && npm install"
+    },
+    "dependencies": {}
+  }
